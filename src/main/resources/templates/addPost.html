@@ -30,6 +30,7 @@
                 <a class="nav-item nav-link" th:href="@{/posts}">Вакансии</a>
                 <a class="nav-item nav-link active" th:href="@{/formAddPost}">Добавить вакансию</a>
                 <a class="nav-item nav-link" th:href="@{/candidates}">Кандидаты</a>
+                <a class="nav-item nav-link active" th:href="@{/formAddCandidate}">Добавить кандидата</a>
             </div>
         </div>
     </nav>
@@ -44,7 +45,7 @@
                     <div class="form-group">
                         <label for="name">Имя</label>
                         <input type="text" class="form-control" name="name" id="name">
-                        <label for="name">описание</label>
+                        <label for="name">Описание</label>
                         <input type="text" class="form-control" name="description" id="description">
                     </div>
                     <button type="submit" class="btn btn-primary">Сохранить</button>
