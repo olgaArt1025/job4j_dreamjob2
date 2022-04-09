@@ -39,4 +39,13 @@ public class PostStore {
         }
         posts.put(post.getId(), post);
     }
+
+    public Post findById(Integer id) {
+        return posts.get(id);
+    }
+
+    public void update(Post post) {
+        posts.replace(post.getId(), post);
+        post.setCreated(LocalDate.now());
+    }
 }
