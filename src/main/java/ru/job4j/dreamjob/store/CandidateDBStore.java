@@ -62,7 +62,7 @@ public class CandidateDBStore {
     public void update(Candidate candidate) {
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement("UPDATE candidate SET  name = ?, description = ?," +
-                     " created = ?, photo = ?,  WHERE id = ?")
+                     " created = ?, photo = ? WHERE id = ?")
         ) {
             ps.setString(1, candidate.getName());
             ps.setString(2, candidate.getDescription());
