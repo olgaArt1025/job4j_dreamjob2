@@ -20,46 +20,50 @@ public class UserDBStore {
     }
 
     public List<User> findAll() {
-        List<User> posts = new ArrayList<>();
+        List<User> users = new ArrayList<>();
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement("SELECT * FROM user")
         ) {
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
-                    posts.add(new User(it.getInt("id"), it.getString("email"), it.getString("password")));
+                    users.add(new User(it.getInt("id"), it.getString("name"),
+                            it.getString("email"), it.getString("password")));
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return posts;
+        return users;
     }
 
     public Optional<User> add(User user) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("INSERT INTO user(email, password)  VALUES (?, ?)",
+             PreparedStatement ps = cn.prepareStatement("INSERT INTO user(name, email, password)  VALUES (?, ?, ?)",
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
-            ps.setString(1, user.getEmail());
-            ps.setString(2, user.getPassword());
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
                     user.setId(id.getInt(1));
                 }
             }
+            return Optional.of(user);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return Optional.ofNullable(user);
+        return Optional.empty();
     }
 
     public void update(User user) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("UPDATE user SET  email = ?, password = ?  WHERE id = ?")
+             PreparedStatement ps = cn.prepareStatement("UPDATE user SET  name = ?, email = ?, password = ?  WHERE id = ?")
         ) {
-            ps.setString(1, user.getEmail());
-            ps.setString(2, user.getPassword());
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
             ps.execute();
         } catch (Exception e) {
             e.printStackTrace();
@@ -73,7 +77,7 @@ public class UserDBStore {
             ps.setInt(1, id);
             try (ResultSet it = ps.executeQuery()) {
                 if (it.next()) {
-                    return new User(it.getInt("id"), it.getString("email"), it.getString("password"));
+                    return new User(it.getInt("id"), it.getString("name"), it.getString("email"), it.getString("password"));
                 }
             }
         } catch (Exception e) {
@@ -90,8 +94,8 @@ public class UserDBStore {
             ps.setString(2, password);
             try (ResultSet it = ps.executeQuery()) {
                 if (it.next()) {
-                    return Optional.ofNullable(new User(it.getInt("id"),
-                            it.getString("email"), it.getString("password")));
+                    return Optional.of(new User(it.getInt("id"),
+                            it.getString("name"), it.getString("email"), it.getString("password")));
                 }
             }
         } catch (Exception e) {

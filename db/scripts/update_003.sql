@@ -1,5 +1,6 @@
 CREATE TABLE user (
   id SERIAL PRIMARY KEY,
+  name  TEXT,
   email VARCHAR(70),
   password varchar(15)
 );
